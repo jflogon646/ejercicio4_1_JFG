@@ -11,6 +11,7 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
      *  trimestres (uno por cada trimestre y un cuarto para la nota final) que tienen el tamaño establecido
      *  por el número de alumnos.
      *
+     * las funciones privadas están al final del fichero
      */
 
 
@@ -22,52 +23,6 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
     private var evaluaciones: Array<FloatArray> = Array(4) { FloatArray(_numeroAlumnos) { -1.0F } }
 
 
-    /* Funciones auxiliares */
-
-    //Usada en apartado 3
-    private fun listadoPorTrimestre(trimestre: Int): MutableList<Pair<String, Float>> {
-        var lista: MutableList<Pair<String, Float>> = mutableListOf(Pair("", 0.0F))
-        var contador: Int = 0
-        for (alumno in alumnos) {
-            lista.add(Pair(alumno?.id.toString(), evaluaciones[trimestre][contador]))
-        }
-        lista.remove(Pair("", 0.0F))
-        return lista
-    }
-
-    //Usada en apartado 4, 8 y 9
-    private fun contadorAprobados(evaluacion: Int, balizaComprobacion: Boolean): Int {
-        var contador = 0
-        var x = 0
-        if (balizaComprobacion) {
-            while (x < numeroAlumnos) {
-                if (evaluaciones[evaluacion][x] == 10.0F) {
-                    contador++
-                }
-                x++
-            }
-        }
-        else {
-            while (x < numeroAlumnos) {
-                if (evaluaciones[evaluacion][x] >= 5.0F) {
-                    contador++
-                }
-                x++
-            }
-        }
-        return contador
-    }
-
-    //Usada en apartado 5 y 6
-    private fun ordenaNotas(orden: Boolean, trimestre: Int): Float {
-        var listado = evaluaciones[trimestre].sort()
-        return if (orden) {
-            evaluaciones[trimestre][0]
-        } else {
-            evaluaciones[trimestre][numeroAlumnos - 1]
-        }
-    }
-
 
     /* Métodos */
 
@@ -78,7 +33,6 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
         when (evaluacion.uppercase()) {
             "PRIMERA" -> {
                 trimestre = 0
-
             }
             "SEGUNDA" -> {
                 trimestre = 1
@@ -129,65 +83,35 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
     //Apartado 5
     fun notaMasBaja(evaluacion: String): Float {
         when (evaluacion.uppercase()) {
-            "PRIMERA" -> {
-                return ordenaNotas(true, 0)
-            }
-            "SEGUNDA" -> {
-                return ordenaNotas(true, 1)
-            }
-            "TERCERA" -> {
-                return ordenaNotas(true, 2)
-            }
-            "FINAL" -> {
-                return ordenaNotas(true, 3)
-            }
-            else -> {
-                return -1.0F
-            }
+            "PRIMERA" -> { return ordenaNotas(true, 0) }
+            "SEGUNDA" -> { return ordenaNotas(true, 1) }
+            "TERCERA" -> { return ordenaNotas(true, 2) }
+            "FINAL" -> { return ordenaNotas(true, 3) }
+            else -> { return -1.0F }
         }
     }
 
     //Apartado 6
     fun notaMasAlta(evaluacion: String): Float {
         when (evaluacion.uppercase()) {
-            "PRIMERA" -> {
-                return ordenaNotas(false, 0)
-            }
-            "SEGUNDA" -> {
-                return ordenaNotas(false, 1)
-            }
-            "TERCERA" -> {
-                return ordenaNotas(false, 2)
-            }
-            "FINAL" -> {
-                return ordenaNotas(false, 3)
-            }
-            else -> {
-                return -1.0F
-            }
+            "PRIMERA" -> { return ordenaNotas(false, 0) }
+            "SEGUNDA" -> { return ordenaNotas(false, 1) }
+            "TERCERA" -> { return ordenaNotas(false, 2) }
+            "FINAL" -> { return ordenaNotas(false, 3) }
+            else -> { return -1.0F }
         }
     }
 
     //Apartado 7
     fun notaMedia(evaluacion: String): Float {
         when (evaluacion.uppercase()) {
-            "PRIMERA" -> {
-                return evaluaciones[0].average().toFloat()
-            }
-            "SEGUNDA" -> {
-                return evaluaciones[0].average().toFloat()
-            }
-            "TERCERA" -> {
-                return evaluaciones[0].average().toFloat()
-            }
-            "FINAL" -> {
-                return evaluaciones[0].average().toFloat()
-            }
-            else -> {
-                return -1.0F
-            }
+            "PRIMERA" -> { return evaluaciones[0].average().toFloat() }
+            "SEGUNDA" -> { return evaluaciones[0].average().toFloat() }
+            "TERCERA" -> { return evaluaciones[0].average().toFloat() }
+            "FINAL" -> { return evaluaciones[0].average().toFloat() }
+            else -> { return -1.0F }
         }
-    } //Float
+    }
 
     //Apartado 8
     fun hayAlumnosConDiez(evaluacion: String): Boolean {
@@ -200,7 +124,7 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
             else -> { return false }
         }
         return (comprobador != 0)
-    } //Boolean
+    }
 
     //Apartado 9
     fun hayAlumnosAprobados(evaluacion: String): Boolean {
@@ -216,15 +140,110 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
     } //Boolean
 
     //Apartado 10
-    fun primeraNotaAprobada() {} //Float
+    fun primeraNotaAprobada(evaluacion: String): Float{
+        return when (evaluacion.uppercase()) {
+            "PRIMERA" -> { notaAprobada(0) }
+            "SEGUNDA" -> { notaAprobada(1) }
+            "TERCERA" -> { notaAprobada(2) }
+            "FINAL" -> { notaAprobada(3) }
+            else -> { -1.0F }
+        }
+
+    }
 
     //Apartado 11
-    fun listaNotasOrdenadas() {} //list<pair>
+    fun listaNotasOrdenadas(evaluacion: String) {
+        val lista: List<Pair<String,Float>>
+        val listaordenada = alumnos.sortedBy { it -> it?.id }
+        when (evaluacion.uppercase()) {
+            "PRIMERA" -> {
+
+            }
+            "SEGUNDA" -> {}
+            "TERCERA" -> {}
+            "FINAL" -> {}
+            else -> {  }
+        }
+    } //list<pair>
 
     //Apartado 12
-    fun matricularAlumno() {} //Boolean
+    fun matricularAlumno(alumno: Alumno) {} //Boolean
 
     //Apartado 13
-    fun bajaAlumno() {} //Boolean
+    fun bajaAlumno(idAlumno: String) {} //Boolean
+
+
+    /* Funciones auxiliares */
+
+    //Usada en apartado 3
+    private fun listadoPorTrimestre(trimestre: Int): MutableList<Pair<String, Float>> {
+        var lista: MutableList<Pair<String, Float>> = mutableListOf(Pair("", 0.0F))
+        var contador: Int = 0
+        for (alumno in alumnos) {
+            lista.add(Pair(alumno?.id.toString(), evaluaciones[trimestre][contador]))
+        }
+        lista.remove(Pair("", 0.0F))
+        return lista
+    }
+
+    //Usada en apartado 4, 8 y 9
+    private fun contadorAprobados(evaluacion: Int, balizaComprobacion: Boolean): Int {
+        var contador = 0
+        var x = 0
+        if (balizaComprobacion) {
+            while (x < numeroAlumnos) {
+                if (evaluaciones[evaluacion][x] == 10.0F) {
+                    contador++
+                }
+                x++
+            }
+        }
+        else {
+            while (x < numeroAlumnos) {
+                if (evaluaciones[evaluacion][x] >= 5.0F) {
+                    contador++
+                }
+                x++
+            }
+        }
+        return contador
+    }
+
+    //Usada en apartado 5 y 6
+    private fun ordenaNotas(orden: Boolean, trimestre: Int): Float {
+        var listado = evaluaciones[trimestre].sort()
+        return if (orden) {
+            evaluaciones[trimestre][0]
+        } else {
+            evaluaciones[trimestre][numeroAlumnos - 1]
+        }
+    }
+
+    private fun notaAprobada(trimestre: Int): Float{
+        var nota: Float = - 1.0F
+        var contador: Int = 0
+        var check: Boolean = false
+        while ((contador < numeroAlumnos || !check)) {
+            if(evaluaciones[trimestre][contador] >= 5.0F) {
+                nota = evaluaciones[trimestre][contador]
+                check = true
+            }
+            contador++
+        }
+        return nota
+    }
+
+    //Usada en apartado 11
+    private fun listadoOrdenadoPorTrimestre(trimestre: Int,lista: Array<Alumno?> ): MutableList<Pair<String, Float>> {
+        var listado: MutableList<Pair<String, Float>> = mutableListOf(Pair("", 0.0F))
+        var contador: Int = 0
+        for (alumno in lista) {
+            listado.add(Pair(alumno?.id.toString(), evaluaciones[trimestre][contador]))
+        }
+        listado.remove(Pair("", 0.0F))
+        return listado
+    }
+
+
 
 }
