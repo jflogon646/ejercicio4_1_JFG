@@ -28,20 +28,17 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
 
     //Apartado 1
     fun establecerNota(idAlumno: String, evaluacion: String, nota: Float): Boolean {
-        val trimestre: Int
         var posicion: Int
+        var check = false
         when (evaluacion.uppercase()) {
             "PRIMERA" -> {
-                trimestre = 0
+
             }
             "SEGUNDA" -> {
-                trimestre = 1
+
             }
             "TERCERA" -> {
-                trimestre = 2
-            }
-            else -> {
-                return false
+
             }
         }
         return true
@@ -140,12 +137,12 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
     } //Boolean
 
     //Apartado 10
-    fun primeraNotaAprobada(evaluacion: String): Float{
+    fun primeraNotaNoAprobada(evaluacion: String): Float{
         return when (evaluacion.uppercase()) {
-            "PRIMERA" -> { notaAprobada(0) }
-            "SEGUNDA" -> { notaAprobada(1) }
-            "TERCERA" -> { notaAprobada(2) }
-            "FINAL" -> { notaAprobada(3) }
+            "PRIMERA" -> { notaNoAprobada(0) }
+            "SEGUNDA" -> { notaNoAprobada(1) }
+            "TERCERA" -> { notaNoAprobada(2) }
+            "FINAL" -> { notaNoAprobada(3) }
             else -> { -1.0F }
         }
 
@@ -164,13 +161,35 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
             "FINAL" -> {}
             else -> {  }
         }
-    } //list<pair>
+    }
 
     //Apartado 12
-    fun matricularAlumno(alumno: Alumno) {} //Boolean
+    fun matricularAlumno(alumno: Alumno): Boolean {
+        var contador: Int = 0
+        var check = false
+        while ((contador < numeroAlumnos || !check)) {
+            if (alumnos[contador] == null) {
+                alumnos[contador] = alumno
+                check = true
+            }
+            contador++
+        }
+        return check
+    }
 
     //Apartado 13
-    fun bajaAlumno(idAlumno: String) {} //Boolean
+    fun bajaAlumno(idAlumno: String): Boolean {
+        var check = false
+        var contador = 0
+        while((contador < numeroAlumnos || !check)) {
+            if (alumnos[contador]?.id == idAlumno) {
+                alumnos[contador] = null
+                check = true
+            }
+            contador++
+        }
+        return check
+    }
 
 
     /* Funciones auxiliares */
@@ -219,12 +238,13 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
         }
     }
 
-    private fun notaAprobada(trimestre: Int): Float{
+    //Usada en apartado 10
+    private fun notaNoAprobada(trimestre: Int): Float{
         var nota: Float = - 1.0F
         var contador: Int = 0
         var check: Boolean = false
         while ((contador < numeroAlumnos || !check)) {
-            if(evaluaciones[trimestre][contador] >= 5.0F) {
+            if(evaluaciones[trimestre][contador] < 5.0F) {
                 nota = evaluaciones[trimestre][contador]
                 check = true
             }
