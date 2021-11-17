@@ -28,20 +28,23 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
 
     //Apartado 1
     fun establecerNota(idAlumno: String, evaluacion: String, nota: Float): Boolean {
-        var posicion: Int
+        var posicion: Int = alumnos.indexOfFirst { it -> it?.id == idAlumno }
         var check = false
         when (evaluacion.uppercase()) {
             "PRIMERA" -> {
-
+                evaluaciones[0][posicion] = nota
+                check = true
             }
             "SEGUNDA" -> {
-
+                evaluaciones[1][posicion] = nota
+                check = true
             }
             "TERCERA" -> {
-
+                evaluaciones[2][posicion] = nota
+                check = true
             }
         }
-        return true
+        return check
     }
 
     //Apartado 2
@@ -54,113 +57,50 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
 
     //Apartado 3
     fun listaNotas(evaluacion: String): List<Pair<String, Float>> {
-        var listanotas: List<Pair<String, Float>>
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> { listanotas = listadoPorTrimestre(0) }
-            "SEGUNDA" -> { listanotas = listadoPorTrimestre(1) }
-            "TERCERA" -> { listanotas = listadoPorTrimestre(2) }
-            "FINAL" -> { listanotas = listadoPorTrimestre(3) }
-            else -> { listanotas = listOf(Pair("Evaluacion fallida", 0.0F)) }
-        }
-        return listanotas
+        return listadoPorTrimestre(compruebaEvaluacion(evaluacion))
     }
 
     //Apartado 4
     fun numeroAprobados(evaluacion: String): Int {
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> { return contadorAprobados(0,false) }
-            "SEGUNDA" -> { return contadorAprobados(1,false) }
-            "TERCERA" -> { return contadorAprobados(2,false) }
-            "FINAL" -> { return contadorAprobados(3,false) }
-            else -> { return -1 }
-        }
+        return contadorAprobados(compruebaEvaluacion(evaluacion),false)
     }
 
 
     //Apartado 5
     fun notaMasBaja(evaluacion: String): Float {
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> { return ordenaNotas(true, 0) }
-            "SEGUNDA" -> { return ordenaNotas(true, 1) }
-            "TERCERA" -> { return ordenaNotas(true, 2) }
-            "FINAL" -> { return ordenaNotas(true, 3) }
-            else -> { return -1.0F }
-        }
+        return ordenaNotas(true,compruebaEvaluacion(evaluacion))
     }
 
     //Apartado 6
     fun notaMasAlta(evaluacion: String): Float {
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> { return ordenaNotas(false, 0) }
-            "SEGUNDA" -> { return ordenaNotas(false, 1) }
-            "TERCERA" -> { return ordenaNotas(false, 2) }
-            "FINAL" -> { return ordenaNotas(false, 3) }
-            else -> { return -1.0F }
-        }
+        return ordenaNotas(false,compruebaEvaluacion(evaluacion))
     }
 
     //Apartado 7
     fun notaMedia(evaluacion: String): Float {
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> { return evaluaciones[0].average().toFloat() }
-            "SEGUNDA" -> { return evaluaciones[0].average().toFloat() }
-            "TERCERA" -> { return evaluaciones[0].average().toFloat() }
-            "FINAL" -> { return evaluaciones[0].average().toFloat() }
-            else -> { return -1.0F }
-        }
+        return evaluaciones[compruebaEvaluacion(evaluacion)].average().toFloat()
     }
 
     //Apartado 8
     fun hayAlumnosConDiez(evaluacion: String): Boolean {
-        var comprobador: Int
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> { comprobador = contadorAprobados(0,true) }
-            "SEGUNDA" -> { comprobador = contadorAprobados(1,true) }
-            "TERCERA" -> { comprobador = contadorAprobados(2,true) }
-            "FINAL" -> { comprobador = contadorAprobados(3,true) }
-            else -> { return false }
-        }
+        var comprobador: Int = contadorAprobados(compruebaEvaluacion(evaluacion),true)
         return (comprobador != 0)
     }
 
     //Apartado 9
     fun hayAlumnosAprobados(evaluacion: String): Boolean {
-        var comprobador: Int
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> { comprobador = contadorAprobados(0,false) }
-            "SEGUNDA" -> { comprobador = contadorAprobados(1,false) }
-            "TERCERA" -> { comprobador = contadorAprobados(2,false) }
-            "FINAL" -> { comprobador = contadorAprobados(3,false) }
-            else -> { return false }
-        }
+        var comprobador: Int = contadorAprobados(compruebaEvaluacion(evaluacion),false)
         return (comprobador != 0)
     } //Boolean
 
     //Apartado 10
     fun primeraNotaNoAprobada(evaluacion: String): Float{
-        return when (evaluacion.uppercase()) {
-            "PRIMERA" -> { notaNoAprobada(0) }
-            "SEGUNDA" -> { notaNoAprobada(1) }
-            "TERCERA" -> { notaNoAprobada(2) }
-            "FINAL" -> { notaNoAprobada(3) }
-            else -> { -1.0F }
-        }
-
+        return notaNoAprobada(compruebaEvaluacion(evaluacion))
     }
 
     //Apartado 11
-    fun listaNotasOrdenadas(evaluacion: String) {
-        val lista: List<Pair<String,Float>>
-        val listaordenada = alumnos.sortedBy { it -> it?.id }
-        when (evaluacion.uppercase()) {
-            "PRIMERA" -> {
-
-            }
-            "SEGUNDA" -> {}
-            "TERCERA" -> {}
-            "FINAL" -> {}
-            else -> {  }
-        }
+    fun listaNotasOrdenadas(evaluacion: String): List<Pair<String,Float>> {
+        return listaNotas(evaluacion).sortedBy { it.second }
     }
 
     //Apartado 12
@@ -184,6 +124,7 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
         while((contador < numeroAlumnos || !check)) {
             if (alumnos[contador]?.id == idAlumno) {
                 alumnos[contador] = null
+
                 check = true
             }
             contador++
@@ -193,6 +134,18 @@ class Modulo(_nombre: String = "", _numeroAlumnos: Int) {
 
 
     /* Funciones auxiliares */
+
+    // Usada en todos los métodos que tienen como parámetro la evaluación (3, 4, 5, 6, 7, 8, 9, 10, 11) excepto el 1.
+    private fun compruebaEvaluacion(evaluacion: String): Int{
+        return when (evaluacion.uppercase()) {
+            "PRIMERA" -> { 0 }
+            "SEGUNDA" -> { 1 }
+            "TERCERA" -> { 2 }
+            "FINAL" -> { 3 }
+            else -> { 3 }
+        }
+    }
+
 
     //Usada en apartado 3
     private fun listadoPorTrimestre(trimestre: Int): MutableList<Pair<String, Float>> {

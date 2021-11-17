@@ -6,10 +6,15 @@ fun menu(){
     var nota = 0.0F
     var idAlumno = ""
     var comprobacion = false
-    var modulo: Modulo
+
+    print("Escoja el número de alumnos: ")
+    numeroDeAlumnos = readLine()!!.toInt()
+    print("Escoja un nombre para el modulo: ")
+    nombre = readLine().toString() ?: ""
+    var modulo = Modulo(nombre,numeroDeAlumnos)
+
     while (opcion != 14) {
         println("*".repeat(18) + "Menu de modulo" + "*".repeat(18))
-        println("0. Crear modulo.")
         println("1. Establecer nota.")
         println("2. Calculo de la evaluacion final.")
         println("3. Listado de notas")
@@ -27,14 +32,6 @@ fun menu(){
         print("Escoja una opción del menú: ")
         opcion = readLine()!!.toInt()
         when (opcion) {
-            0 -> {
-                print("Escoja el número de alumnos: ")
-                numeroDeAlumnos = readLine()!!.toInt()
-                print("Escoja un nombre para el modulo: ")
-                nombre = readLine().toString() ?: ""
-                modulo = Modulo(nombre,numeroDeAlumnos)
-
-            }
             1 -> {
                 print("Escoja el id del alumno: ")
                 idAlumno = readLine().toString() ?: ""
