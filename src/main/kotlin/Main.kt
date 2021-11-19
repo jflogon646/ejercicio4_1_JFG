@@ -14,7 +14,7 @@ fun menu(){
     var modulo = Modulo(nombre,numeroDeAlumnos)
 
     while (opcion != 14) {
-        println("*".repeat(18) + "Menu de modulo" + "*".repeat(18))
+        println("*".repeat(18) + " MENU DE MODULO " + "*".repeat(18))
         println("1. Establecer nota.")
         println("2. Calculo de la evaluacion final.")
         println("3. Listado de notas")
